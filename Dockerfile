@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Executa as migrações antes de iniciar o servidor
-RUN npx drizzle-kit migrate up
+RUN npx drizzle-kit generate && npx drizzle-kit push
 
 # Define a variável de ambiente para o banco de dados (se necessário)
 ENV DATABASE_URL=postgres://docker:docker@pg:5432/myorbit
