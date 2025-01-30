@@ -1,23 +1,26 @@
-# Usa uma imagem otimizada do Node.js
-FROM node:18-alpine
+# Usa uma imagem oficial do Node.js
+FROM node:20-alpine 
 
 # Define o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copia apenas os arquivos de dependências para otimizar o cache
+# Copia os arquivos do package.json e package-lock.json primeiro para instalar as dependências
 COPY package.json package-lock.json ./
 
-# Instala apenas dependências de produção
-RUN npm install --omit=dev
+# Instala as dependências de produção e desenvolvimento (necessário para drizzle-kit)
+RUN npm install 
 
-# Copia o restante do projeto
+# Copia o restante do código para dentro do container
 COPY . .
 
-# Garante que as migrations sejam aplicadas antes de rodar o servidor
-RUN npm run migrate:up
+# Executa as migrações antes de iniciar o servidor
+RUN npx drizzle-kit migrate up
 
-# Expõe a porta do Fastify
+# Define a variável de ambiente para o banco de dados (se necessário)
+ENV DATABASE_URL=postgres://docker:docker@pg:5432/myorbit
+
+# Expõe a porta do servidor
 EXPOSE 3333
 
 # Comando para rodar o servidor
-CMD ["npx", "tsx", "src/http/server.ts"]
+CMD ["npm", "run", "dev"]
