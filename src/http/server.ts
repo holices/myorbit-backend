@@ -26,7 +26,7 @@ app.register(getWeekSummaryRoute)
 
 app
   .listen({
-    port: 3333,
+    port: Number(process.env.PORT) || 3333,
   })
   .then(() => {
     console.log('HTTP server running! 🚀')
