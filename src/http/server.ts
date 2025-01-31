@@ -24,10 +24,12 @@ app.register(createCompletionRoute)
 app.register(getPendingGoalsRoute)
 app.register(getWeekSummaryRoute)
 
+const port = Number(process.env.PORT) || 3333;
+
 app
   .listen({
-    port: Number(process.env.PORT) || 3333,
+    port: port,
   })
   .then(() => {
-    console.log('HTTP server running! 🚀')
-  })
+    console.log(`HTTP server running on port ${port}! 🚀`);
+  });
