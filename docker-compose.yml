@@ -7,3 +7,16 @@ services:
       - '5432:5432'
     env_file:
       - .env
+
+  backend:
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    ports:
+      - '3333:3333' # Mapeia a porta do container para a porta da máquina host
+    environment:
+      - NODE_ENV=production
+      - PORT=3333
+      # Adicione outras variáveis de ambiente necessárias
+    depends_on:
+      - pg
